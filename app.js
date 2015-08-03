@@ -1,5 +1,8 @@
 var express = require('express');
-var app = express();
+//var app = express(); this was before the app.get files were moved to index.js
+
+var routes = require('./routes/index');
+var pizza = require('./routes/pizza');
 
 //settings to express
 app.set('view engine', 'ejs');
@@ -15,6 +18,10 @@ app.use(function (req, res, next) {
   next(); //respond to this route but look for others as well.
 });
 app.use(express.static('public'));
+//routes --  one way to do this
+//require('./routes/index');
+
+app.use('/', routes);
 
 
 app.use(function (req, res) {
