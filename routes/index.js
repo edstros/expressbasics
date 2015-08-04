@@ -5,16 +5,18 @@ router.get('/', function (req, res) {
   res.send('Hello World!');
 });
 
-router.get('/pizza/:topping/:qty', function (req, res) {
+/*router.get('/pizza/:topping/:qty', function (req, res) {
   var obj = req.params;
   obj.title = 'Pizza Shop';
   res.render('templates/pizza', obj); //object that represents your route params
-});
+});*/
 
 
 router.get(/hello/, function (req, res) {
   res.send('Hello!');
 });
+
+//need to fix this; returns a server error
 
 router.get('/awesomethings', function (req, res) {
   setTimeout(function () {
@@ -26,7 +28,7 @@ router.get('/awesomethings', function (req, res) {
     'Space Jam'
   ];
     res.render('templates/world', {
-      title: 'Awesomesite.com',
+      //title: 'Awesomesite.com', //use instead app.locals.title in app.js; creates a global variable
       welcome: 'Thanks for coming!',
       awesomeThings: awesomeThings
     });
@@ -58,4 +60,4 @@ router.get('/thisshoulderror', function (req, res) {
   res.send(badVariable);
 });
 
-module.exports = app;
+module.exports = router;

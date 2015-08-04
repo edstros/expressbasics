@@ -1,12 +1,22 @@
+//npm requires
 var express = require('express');
-//var app = express(); this was before the app.get files were moved to index.js
+var lessCSS = require('less-middleware');
 
+//route requires
 var routes = require('./routes/index');
 var pizza = require('./routes/pizza');
 
+//variables
+var app = express(); //this was before the app.get files were moved to index.js
+
 //settings to express
 app.set('view engine', 'ejs');
+app.set('case sensitive routing', true);//just what it says
 
+//global variable; all of the templates have access to it
+app.locals.title = 'aweso.me';
+
+app.use(lessCSS('public'));
 
 //shorthand
 /*
@@ -22,6 +32,7 @@ app.use(express.static('public'));
 //require('./routes/index');
 
 app.use('/', routes);
+app.use('/pizza', pizza);
 
 
 app.use(function (req, res) {
