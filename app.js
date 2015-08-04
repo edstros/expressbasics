@@ -56,6 +56,9 @@ app.use(morgan('dev'));
 });*/
 
 //using loggly, in case server goes down, can still see logs
+// we can create a loggly client with whatever tag we choose
+// to specify the type of log that is occurring. here is one for
+// incoming requests to our server:
 app.use(function (err, req, res, next) {
   var client = require('./lib/loggly')('incoming');
   client.log({
@@ -68,6 +71,8 @@ app.use(function (err, req, res, next) {
   next();
 });
 
+  // here is another loggly client for specifically created
+  // to handle error logs
 app.use(function (err, req, res, next) {
   var client = require('./lib/loggly')('error');
   client.log({
