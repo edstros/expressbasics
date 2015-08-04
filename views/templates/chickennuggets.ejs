@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><%= title %> | Chicken Nuggets</title>
+</head>
+<body>
+  <h1>World Famous Chicken Nuggets</h1>
+  <form action="chickennuggets/order" method="POST">
+    <input type="text" placeholder="Name" name="nuggets_for">
+    <label>Style:</label>
+     <select name="style">
+      <options value='mild'>Mild</options>
+      <options value='medium'>Medium</options>
+      <options value='spicy'>Spicy</options>
+      <options value='atomic'>Atomic</options>
+    </select>
+    <label>How many?</label>
+    <input type="number" min="6" name="qty">
+    <input type="submit" value="Order me some nuggets">
+  </form>
+</body>
+</html>

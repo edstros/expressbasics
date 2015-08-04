@@ -4,22 +4,21 @@ var fs = require('fs');
 var express = require('express');
 var lessCSS = require('less-middleware');
 var morgan = require('morgan');
+var bodyParser = require('body-parser');
 
 
 //route requires
 var routes = require('./routes/index');
 var pizza = require('./routes/pizza');
+var chickennuggets = require('./routes/chickennuggets');
 
 //variables
 var app = express(); //this was before the app.get files were moved to index.js
-
 //settings to express
 app.set('view engine', 'ejs');
 app.set('case sensitive routing', true); //just what it says
-
 //global variable; all of the templates have access to it
 app.locals.title = 'aweso.me';
-
 app.use(lessCSS('public'));
 
 //shorthand
@@ -31,8 +30,8 @@ var app = require('express')();
   console.log('Request at ' + new Date().toISOString());
   next(); //respond to this route but look for others as well.
 });*/
-
 /*npm logging module / need to create a stream*/
+
 var logStream = fs.createWriteStream('access.log', {
   flags: 'a'
 }); //'a' appends to file
@@ -43,7 +42,6 @@ app.use(morgan('combined', {
   stream: logStream
 })); //log output to file
 app.use(morgan('dev'));
-
 
 /*app.use(function (err, req, res, next){
   var client = require ('./lib/loggly')('error');
@@ -71,8 +69,8 @@ app.use(function (err, req, res, next) {
   next();
 });
 
-  // here is another loggly client for specifically created
-  // to handle error logs
+// here is another loggly client for specifically created
+// to handle error logs
 app.use(function (err, req, res, next) {
   var client = require('./lib/loggly')('error');
   client.log({
@@ -86,7 +84,7 @@ app.use(function (err, req, res, next) {
   res.status(500).send('[Error message]');
 });
 
-app.use(function (req, res, next) {
+/*app.use(function (req, res, next) {
   client.log({
     ip: req.ip,
     date: new Date(),
@@ -96,16 +94,17 @@ app.use(function (req, res, next) {
     err: err
   });
   next();
-});
+});*/
 
 app.use(express.static('public'));
+app.use(bodyParser.urlencoded({extended:false}))
+
 
 //routes --  one way to do this
 //require('./routes/index');
-
 app.use('/', routes);
 app.use('/pizza', pizza);
-
+app.use('/chickennuggets', chickennuggets);
 
 app.use(function (req, res) {
   res.status(403); //400s before the 500s
