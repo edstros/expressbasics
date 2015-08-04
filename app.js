@@ -1,7 +1,10 @@
+var fs = require('fs');
+
 //npm requires
 var express = require('express');
 var lessCSS = require('less-middleware');
 var morgan = require('morgan');
+var loggly = require('loggly');
 
 //route requires
 var routes = require('./routes/index');
@@ -29,9 +32,25 @@ var app = require('express')();
   next(); //respond to this route but look for others as well.
 });*/
 
-app.use(morgan('dev')); //log output
+/*npm logging module / need to create a stream*/
+var logStream = fs.createWriteStream('access.log', {flags: 'a'});//'a' appends to file
+/*app.use(morgan('dev')); //log output simple format*/
+/*app.use(morgan('combined')); //log output apache format*/
+/*app.use(morgan('common')); //log output shorter format */
+app.use(morgan('combined', {stream: logStream})); //log output to file
+app.use(morgan('dev'));
+
+ var client = loggly.createClient({
+    token: "1cae3802-0bfb-4462-8b6f-4697c794867c",
+    subdomain: "edwinacevedo",
+    tags: ["NodeJS"],
+    json: true
+});
+
+client.log("Hello World from Node.js!");
 
 app.use(express.static('public'));
+
 //routes --  one way to do this
 //require('./routes/index');
 
