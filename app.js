@@ -4,7 +4,7 @@ var fs = require('fs');
 var express = require('express');
 var lessCSS = require('less-middleware');
 var morgan = require('morgan');
-var loggly = require('loggly');
+
 
 //route requires
 var routes = require('./routes/index');
@@ -15,7 +15,7 @@ var app = express(); //this was before the app.get files were moved to index.js
 
 //settings to express
 app.set('view engine', 'ejs');
-app.set('case sensitive routing', true);//just what it says
+app.set('case sensitive routing', true); //just what it says
 
 //global variable; all of the templates have access to it
 app.locals.title = 'aweso.me';
@@ -33,21 +33,65 @@ var app = require('express')();
 });*/
 
 /*npm logging module / need to create a stream*/
-var logStream = fs.createWriteStream('access.log', {flags: 'a'});//'a' appends to file
+var logStream = fs.createWriteStream('access.log', {
+  flags: 'a'
+}); //'a' appends to file
 /*app.use(morgan('dev')); //log output simple format*/
 /*app.use(morgan('combined')); //log output apache format*/
 /*app.use(morgan('common')); //log output shorter format */
-app.use(morgan('combined', {stream: logStream})); //log output to file
+app.use(morgan('combined', {
+  stream: logStream
+})); //log output to file
 app.use(morgan('dev'));
 
- var client = loggly.createClient({
-    token: "1cae3802-0bfb-4462-8b6f-4697c794867c",
-    subdomain: "edwinacevedo",
-    tags: ["NodeJS"],
-    json: true
+
+/*app.use(function (err, req, res, next){
+  var client = require ('./lib/loggly')('error');
+});*/
+/*var client = loggly.createClient({
+  token: "1cae3802-0bfb-4462-8b6f-4697c794867c",
+  subdomain: "edwinacevedo",
+  tags: ["NodeJS"],
+  json: true
+});*/
+
+//using loggly, in case server goes down, can still see logs
+app.use(function (err, req, res, next) {
+  var client = require('./lib/loggly')('incoming');
+  client.log({
+    ip: req.ip,
+    date: new Date(),
+    url: req.url,
+    status: res.statusCode,
+    method: req.method
+  });
+  next();
 });
 
-client.log("Hello World from Node.js!");
+app.use(function (err, req, res, next) {
+  var client = require('./lib/loggly')('error');
+  client.log({
+    ip: req.ip,
+    date: new Date(),
+    url: req.url,
+    status: res.statusCode,
+    method: req.method,
+    error: err
+  });
+  res.status(500).send('[Error message]');
+});
+
+app.use(function (req, res, next) {
+  client.log({
+    ip: req.ip,
+    date: new Date(),
+    url: req.url,
+    status: res.statusCode,
+    method: req.method,
+    err: err
+  });
+  next();
+});
 
 app.use(express.static('public'));
 
