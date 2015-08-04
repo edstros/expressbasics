@@ -1,6 +1,7 @@
 //npm requires
 var express = require('express');
 var lessCSS = require('less-middleware');
+var morgan = require('morgan');
 
 //route requires
 var routes = require('./routes/index');
@@ -22,11 +23,14 @@ app.use(lessCSS('public'));
 /*
 var app = require('express')();
 */
-app.use(function (req, res, next) {
+/*app.use(function (req, res, next) {
   //logging at the top
   console.log('Request at ' + new Date().toISOString());
   next(); //respond to this route but look for others as well.
-});
+});*/
+
+app.use(morgan('dev')); //log output
+
 app.use(express.static('public'));
 //routes --  one way to do this
 //require('./routes/index');

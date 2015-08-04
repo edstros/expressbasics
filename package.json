@@ -19,6 +19,7 @@
   "dependencies": {
     "ejs": "^2.3.3",
     "express": "^4.13.3",
-    "less-middleware": "^2.0.1"
+    "less-middleware": "^2.0.1",
+    "morgan": "^1.6.1"
   }
 }
