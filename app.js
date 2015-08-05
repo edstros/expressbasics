@@ -14,6 +14,9 @@ var chickennuggets = require('./routes/chickennuggets');
 
 //variables
 var app = express(); //this was before the app.get files were moved to index.js
+
+require('./lib/secrets');
+
 //settings to express
 app.set('view engine', 'ejs');
 app.set('case sensitive routing', true); //just what it says
