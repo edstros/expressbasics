@@ -19,20 +19,25 @@ router.get(/hello/, function (req, res) {
 //need to fix this; returns a server error
 
 router.get('/awesomethings', function (req, res) {
-  setTimeout(function () {
-    var awesomeThings = [
-    'Pizza',
-    'Bacon',
-    '2nd Amendment',
-    'Pluto',
-    'Space Jam'
-  ];
+  var collection = global.db.collection('awesomeThings'); //this is new to create bs in MongoDB
+  collection.find({}).toArray(function (err, awesomeThings) {
+    //find everything in the collection awesomeThings
+
+    /*  setTimeout(function () {
+        var awesomeThings = [
+        'Pizza',
+        'Bacon',
+        '2nd Amendment',
+        'Pluto',
+        'Space Jam'
+      ];*/
     res.render('templates/world', {
       //title: 'Awesomesite.com', //use instead app.locals.title in app.js; creates a global variable
       welcome: 'Thanks for coming!',
       awesomeThings: awesomeThings
     });
-  }, 5000);
+  });
+  /*  }, 5000);*/
 });
 
 

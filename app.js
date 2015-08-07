@@ -7,15 +7,18 @@ var morgan = require('morgan');
 var bodyParser = require('body-parser');
 
 
+
 //route requires
 var routes = require('./routes/index');
 var pizza = require('./routes/pizza');
 var chickennuggets = require('./routes/chickennuggets');
+var imgur = require('./routes/imgur');
 
 //variables
 var app = express(); //this was before the app.get files were moved to index.js
 
 require('./lib/secrets');
+require('./lib/mongodb');
 
 //settings to express
 app.set('view engine', 'ejs');
@@ -108,6 +111,7 @@ app.use(bodyParser.urlencoded({extended:false}))
 app.use('/', routes);
 app.use('/pizza', pizza);
 app.use('/chickennuggets', chickennuggets);
+app.use('/imgur', imgur);
 
 app.use(function (req, res) {
   res.status(403); //400s before the 500s
