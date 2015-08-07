@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><%= title %> | Chicken | List Orders </title>
+</head>
+<body>
+  <h1>Orders</h1>
+  <table>
+    <thead><tr>
+      <th>Name</th>
+      <th>Flavor</th>
+      <th>Qty</th>
+      <th>Time</th>
+    </tr>
+      <tbody>
+        <% orders.forEach(function (order) { %>
+        <tr>
+          <td><%= order.name %></td>
+          <td><%= order.flavor %></td>
+          <td><%= order.qty %></td>
+          <td><%= order.createdAt %></td>
+        </tr>
+
+        <% }); %>
+      </tbody>
+    </thead>
+  </table>
+</body>
+</html>
