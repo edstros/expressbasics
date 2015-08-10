@@ -16,7 +16,10 @@ var imgur = require('./routes/imgur');
 //variables
 var app = express(); //this was before the app.get files were moved to index.js
 
-require('./lib/secrets');
+if (process.env.NODE.ENV !== 'production') {
+  require('./lib/secrets');
+}
+
 require('./lib/mongodb');
 
 //settings to express
@@ -102,7 +105,9 @@ app.use(function (err, req, res, next) {
 });*/
 
 app.use(express.static('public'));
-app.use(bodyParser.urlencoded({extended:false}))
+app.use(bodyParser.urlencoded({
+  extended: false
+}))
 
 
 //routes --  one way to do this
@@ -120,9 +125,10 @@ app.use(function (req, res) {
 //if it's at the top, everything will be unauthorized
 app.use(function (err, req, res, next) {
   //pass 4 arguments to create an error handling middleware
-  console.log('MISTAKES WERE MADE!', err.stack);
+  console.log('OH NO! THERE WAS AN ERROR', err.stack);
   res.status(500).send('My Bad');
 });
+
 var server = app.listen(3000, function () {
   var host = server.address().address;
   var port = server.address().port;

@@ -1,30 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <title><%= title %> | Chicken | List Orders </title>
+  <title>
+    <%= title %> | Chicken | List Orders </title>
 </head>
-<body>
-  <h1>Orders</h1>
-  <table>
-    <thead><tr>
-      <th>Name</th>
-      <th>Flavor</th>
-      <th>Qty</th>
-      <th>Time</th>
-    </tr>
-      <tbody>
-        <% orders.forEach(function (order) { %>
-        <tr>
-          <td><%= order.name %></td>
-          <td><%= order.flavor %></td>
-          <td><%= order.qty %></td>
-          <td><%= order.createdAt %></td>
-        </tr>
 
-        <% }); %>
+<body>
+  <h1>Pending orders</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Flavor</th>
+        <th>Qty</th>
+        <th>Time</th>
+        <th>Complete</th>
+      </tr>
+      <tbody>
+        <% uncompletedOrders.forEach(function (order) { %>
+          <tr>
+            <td><%= order.name %></td>
+            <td><%= order.flavor %></td>
+            <td><%= order.qty %></td>
+            <td><%= order.createdAt %></td>
+            <td>
+               <form action="/chickennuggets/order/<%= order._id %>/complete" method="post">
+               <input type="submit" name="orderComplete" value="Complete">
+              </form>
+            </td>
+          </tr>
+          <% }); %>
+      </tbody>
+    </thead>
+  </table>
+  <hr>
+  <h1>Completed orders</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Flavor</th>
+        <th>Qty</th>
+
+
+      </tr>
+      <tbody>
+        <% completedOrders.forEach(function (order) { %>
+          <tr>
+            <td><%= order.nameDone %></td>
+            <td><%= order.flavorDone %></td>
+            <td><%= order.qtyDone %></td>
+          </tr>
+          <% }); %>
       </tbody>
     </thead>
   </table>
 </body>
+
 </html>
