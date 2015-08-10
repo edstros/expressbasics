@@ -17,7 +17,7 @@ var imgur = require('./routes/imgur');
 var app = express(); //this was before the app.get files were moved to index.js
 
 if (process.env.NODE.ENV !== 'production') {
-  require('./lib/secrets');
+  require(path.join(process.cwd()'./lib/secrets'));
 }
 
 require('./lib/mongodb');
