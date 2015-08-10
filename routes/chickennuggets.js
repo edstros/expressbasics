@@ -22,12 +22,10 @@ router.get('/', function (req, res) {
 
       };
     });
-    res.render('templates/chicken-index', {
-      uncompletedOrders: formattedOrders && !complete
-        }
-               )
+    res.render('templates/chicken-index'/*, {
+  uncompletedOrders: formattedOrders && !complete
+}*/)
   })
-})
 })
 
 
