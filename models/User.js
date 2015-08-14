@@ -1,4 +1,4 @@
-var bcrypt = requires('bcrypt');
+var bcrypt = require('bcrypt');
 
 function User(u) {
   this.email = u.email;
