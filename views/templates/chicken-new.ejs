@@ -1,11 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-  <title>
-    <%= title %> | Chicken Nuggets</title>
-</head>
+<%- include('head', {page: 'Chicken | New Order'}) %>
 
 <body>
   <h1>World Famous Chicken Nuggets</h1>
@@ -23,7 +19,8 @@
     <input type="number" min="6" name="qty">
     <input type="submit" value="Order me some nuggets">
   </form>
-</body>
+  <%- include('javascripts') %>
+  </body>
 
 </html>
 

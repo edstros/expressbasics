@@ -1,12 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <title>
-    <%= title %> | Chicken | List Orders </title>
-</head>
-
+<html>
+<%- include('head', {page: 'Chicken | List Orders'}) %>
 <body>
   <h1>Pending orders</h1>
   <table>
@@ -19,7 +13,7 @@
         <th>Complete</th>
       </tr>
       <tbody>
-        <% uncompletedOrders.forEach(function (order) { %>
+        <% Orders.forEach(function (order) { %>
           <tr>
             <td><%= order.name %></td>
             <td><%= order.flavor %></td>
@@ -47,7 +41,7 @@
 
       </tr>
       <tbody>
-        <% completedOrders.forEach(function (order) { %>
+        <% orders.forEach(function (order) { %>
           <tr>
             <td><%= order.nameDone %></td>
             <td><%= order.flavorDone %></td>
@@ -57,6 +51,7 @@
       </tbody>
     </thead>
   </table>
+    <%- include('javascript') %>
 </body>
 
 </html>

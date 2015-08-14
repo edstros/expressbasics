@@ -12,12 +12,13 @@ var routes = require('./routes/index');
 var pizza = require('./routes/pizza');
 var chickennuggets = require('./routes/chickennuggets');
 var imgur = require('./routes/imgur');
+var user = require('./routes/user');
 
 //variables
 var app = express(); //this was before the app.get files were moved to index.js
 
-if (process.env.NODE.ENV !== 'production') {
-  require(path.join(process.cwd()'./lib/secrets'));
+if (process.env.NODE_ENV !== 'production') {
+  require('./lib/secrets');
 }
 
 require('./lib/mongodb');
@@ -27,7 +28,7 @@ app.set('view engine', 'ejs');
 app.set('case sensitive routing', true); //just what it says
 //global variable; all of the templates have access to it
 app.locals.title = 'aweso.me';
-app.use(lessCSS('public'));
+app.use(lessCSS('www/stylesheets'));
 
 //shorthand
 /*
@@ -104,7 +105,7 @@ app.use(function (err, req, res, next) {
   next();
 });*/
 
-app.use(express.static('public'));
+app.use(express.static('www'));
 app.use(bodyParser.urlencoded({
   extended: false
 }))
@@ -116,6 +117,7 @@ app.use('/', routes);
 app.use('/pizza', pizza);
 app.use('/chickennuggets', chickennuggets);
 app.use('/imgur', imgur);
+app.use('/user', user);
 
 app.use(function (req, res) {
   res.status(403); //400s before the 500s
@@ -131,7 +133,7 @@ app.use(function (err, req, res, next) {
 
 var port = process.env.PORT || 3000;
 
-var server = app.listen(PORT, function () {
+var server = app.listen(port, function () {
   var host = server.address().address;
   var port = server.address().port;
   console.log('Example app listening at http://%s:%s', host, port);

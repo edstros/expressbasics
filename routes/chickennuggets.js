@@ -1,55 +1,56 @@
 var express = require('express');
-var moment = require('moment');
 var router = express.Router();
-var ObjectId = require('mongodb').ObjectId;
+
+var moment = require('moment');
+var Order = require('../models/ChickenNuggets');
+
+
+
 /*
 router.get('/', function (req, res) {
   res.render('templates/chickennuggets');
 });*/
 router.get('/', function (req, res) {
-  var collection = global.db.collection('chickenNuggets');
-  collection.find().toArray(function (err, orders) {
-
-    var formattedOrders = orders.map(function (order) {
-      //take an order and return an obect we want it to be
-      console.log(complete)
-      return {
-        _id: order._id,
-        name: order.Nuggets_for,
-        flavor: order.style,
-        qty: order.qty,
-        createdAt: moment(order._id.getTimestamp()).fromNow(),
-
-      };
+  /*ChickenNuggets.findAllOrders(function (err, orders)*/
+  Order.findAll(function (err, orders) {
+    res.render('templates/chicken-index', {
+      orders: formatAllOrders
     });
-    res.render('templates/chicken-index'/*, {
-  uncompletedOrders: formattedOrders && !complete
-}*/)
-  })
-})
+  });
 
-
-      /*completedOrders:   */
-
-
-
-
-
-
+  function formatAllOrders(orders) {
+    return orders.map(function (order) {
+      order.flavor = order.style;
+      order.createdAt = moment(order._id.getTimestamp()).fromNow();
+      delete order.style;
+      return order;
+    });
+  };
+});
 
 router.get('/order', function (req, res) {
   res.render('templates/chicken-new');
 });
 router.post('/order', function (req, res) {
-  var collection = global.db.collection('chickenNuggets');
+  var order = new Order(req.body);
+  order.save(function () {
+      res.redirect('/chickennuggets');
+    })
+    /* var collection = global.db.collection('chickenNuggets');
   collection.save(req.body, function () {
     res.redirect('/chickennuggets')
-  });
-  /* console.log(req.body);*/
-  //res.send('Thanks for your order!');
+});
+   console.log(req.body);*/
+    //res.send('Thanks for your order!');
 });
 router.post('/order/:id/complete', function (req, res) {
-  var collection = global.db.collection('chickenNuggets');
+  Order.findById(req.params.id, function (err, order){
+    order.complete(function (){
+      res.redirect('/chickennuggets');
+    });
+  });
+});
+ /* var collection = global.db.collection('chickenNuggets');
   collection.update({
       _id: ObjectId(req.params.id)
     }, {
@@ -60,7 +61,7 @@ router.post('/order/:id/complete', function (req, res) {
     function () {
       res.redirect('/chickennuggets')
     });
-});
+});*/
 /*
 router.get('/', function (req, res) {
   var collection = global.db.collection('chickenNuggets');
