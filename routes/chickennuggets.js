@@ -4,8 +4,6 @@ var router = express.Router();
 var moment = require('moment');
 var Order = require('../models/ChickenNuggets');
 
-
-
 /*
 router.get('/', function (req, res) {
   res.render('templates/chickennuggets');
@@ -31,10 +29,15 @@ router.get('/', function (req, res) {
 router.get('/order', function (req, res) {
   res.render('templates/chicken-new');
 });
+
 router.post('/order', function (req, res) {
-  var order = new Order(req.body);
-  order.save(function () {
-      res.redirect('/chickennuggets');
+/*  var order = new Order(req.body);
+  order.save(function () {*/
+var o = req.body;
+  o.userId = req.session.user._id;
+  Order.create(o, function () {
+            res.redirect('/chickennuggets');
+
     })
     /* var collection = global.db.collection('chickenNuggets');
   collection.save(req.body, function () {

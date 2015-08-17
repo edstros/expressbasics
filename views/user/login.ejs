@@ -1,17 +1,18 @@
 <!DOCTYPE HTML>
 <html lang="en-US">
 <meta charset="UTF-8">
-<%- include('../templates/head', {page: 'Register'})%>
+<%- include('../templates/head-user', {page: 'Login'})%>
 
   <body>
-    <h1>Sign Up</h1>
+   <%- include('../templates/header') %>
+    <h1>Login</h1>
     <form class="pure-form pure-form-stacked" action="/user/login" method="post">
       <fieldset>
         <label>Email</label>
         <input type="email" name="email" placeholder="ab@abc.com">
         <label>Password</label>
         <input type="password" name="password">
-        <input class="pure-button pure-button-primary" type="submit" value="register">
+        <input class="pure-button pure-button-primary" type="submit" value="login">
       </fieldset>
     </form>
   </body>

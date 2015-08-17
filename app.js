@@ -1,11 +1,10 @@
 var fs = require('fs');
-
 //npm requires
 var express = require('express');
 var lessCSS = require('less-middleware');
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
-
+var session = require('express-session');
 
 //route requires
 var routes = require('./routes/index');
@@ -16,24 +15,20 @@ var user = require('./routes/user');
 
 //variables
 var app = express(); //this was before the app.get files were moved to index.js
-
 if (process.env.NODE_ENV !== 'production') {
   require('./lib/secrets');
 }
-
 require('./lib/mongodb');
-
 //settings to express
 app.set('view engine', 'ejs');
 app.set('case sensitive routing', true); //just what it says
 //global variable; all of the templates have access to it
 app.locals.title = 'aweso.me';
-app.use(lessCSS('www/stylesheets'));
-
 //shorthand
 /*
 var app = require('express')();
 */
+
 /*app.use(function (req, res, next) {
   //logging at the top
   console.log('Request at ' + new Date().toISOString());
@@ -41,12 +36,26 @@ var app = require('express')();
 });*/
 /*npm logging module / need to create a stream*/
 
+app.use(session({
+  secret: 'expressbasicsisareallyawesomeapp',
+  resave: false,
+  saveUninitialized: true
+}));
+
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+
+app.use(lessCSS('www/stylesheets'));
+
 var logStream = fs.createWriteStream('access.log', {
   flags: 'a'
 }); //'a' appends to file
+
 /*app.use(morgan('dev')); //log output simple format*/
 /*app.use(morgan('combined')); //log output apache format*/
 /*app.use(morgan('common')); //log output shorter format */
+
 app.use(morgan('combined', {
   stream: logStream
 })); //log output to file
@@ -105,20 +114,39 @@ app.use(function (err, req, res, next) {
   next();
 });*/
 
+app.use(function getAuthStatus(req, res, next){
+  if (req.session.user){
+    res.locals.user = req.session.user;
+  }else {
+    res.locals.user = null;
+  }
+  next();
+})
+
+app.use('/', routes);
+app.use('/user', user);
 app.use(express.static('www'));
-app.use(bodyParser.urlencoded({
-  extended: false
-}))
-
-
+//middleware function to check all authentication
+app.use(function requireAuth (req, res, next) {
+if (req.session.user){
+  console.log('req.session.user >>>>>>>>')
+  res.locals.user = req.session.user; //check user variable
+  next();
+} else {
+  res.locals.user = null; //if
+  res.redirect('user/login')
+}
+/*  req.session.regenerate(function () {
+    console.log('SESSION >>>>>\n', req.session);
+    console.log('req.sessionID >>>\n', req.sessionID);
+    next();
+  });*/
+});
 //routes --  one way to do this
 //require('./routes/index');
-app.use('/', routes);
 app.use('/pizza', pizza);
 app.use('/chickennuggets', chickennuggets);
 app.use('/imgur', imgur);
-app.use('/user', user);
-
 app.use(function (req, res) {
   res.status(403); //400s before the 500s
   res.send('Unauthorized!');
@@ -130,11 +158,10 @@ app.use(function (err, req, res, next) {
   console.log('OH NO! THERE WAS AN ERROR', err.stack);
   res.status(500).send('My Bad');
 });
-
 var port = process.env.PORT || 3000;
-
 var server = app.listen(port, function () {
   var host = server.address().address;
   var port = server.address().port;
   console.log('Example app listening at http://%s:%s', host, port);
 });
+module.exports = app;

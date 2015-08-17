@@ -3,34 +3,36 @@
 
 <head>
   <title>
-    <%= title %> | Awesomeist Things
+    <%- include('head', {page: 'Awesomeist Things'}) %>
   </title>
   <meta charset="UTF-8">
   <meta name="description" content="" />
   <meta name="keywords" content="" />
-<!--
+  <!--
 <link rel="stylesheet" href="/lib/pure/pure-min.css">
 <link rel="stylesheet" href="/public/stylesheets/main.css">
 -->
-<%- include('stylesheets') %>
+  <%- include('stylesheets') %>
 </head>
 
 <body>
+<%- include('header') %>
   <h1>My site title is <%= title %> </h1>
   <h2><%= welcome %></h2>
   <h3>These are the most awesome things...</h3>
   <ul>
     <% awesomeThings.forEach(function (thing){ %>
-      <li><%= thing.name %> is awesome! </li>
+      <li>
+        <%= thing.name %> is awesome! </li>
       <% }); %>
 
 
-    </ul>
-<!--
+  </ul>
+  <!--
     <script src="/js/main.js"></script>
     <script src="/lib/jquery/dist/jquery.min.js"></script>
 -->
-<%- include('javascript') %>
+  <%- include('javascript') %>
 </body>
 
 </html>

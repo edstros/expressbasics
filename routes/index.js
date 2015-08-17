@@ -40,7 +40,6 @@ router.get('/awesomethings', function (req, res) {
   /*  }, 5000);*/
 });
 
-
 router.get('/', function (req, res) {
   res.send('this is the root!'); //first one gets response like in if/else chain
 });
