@@ -10,9 +10,11 @@ router.get('/', function (req, res) {
 });*/
 router.get('/', function (req, res) {
   /*ChickenNuggets.findAllOrders(function (err, orders)*/
-  Order.findAll(function (err, orders) {
+  //search using the ChickenNuggets model
+ var id = req.session.user._id;
+  Order.findAllByUserId(id, function (err, orders) {
     res.render('templates/chicken-index', {
-      orders: formatAllOrders
+      orders: formatAllOrders(orders)
     });
   });
 
@@ -31,29 +33,29 @@ router.get('/order', function (req, res) {
 });
 
 router.post('/order', function (req, res) {
-/*  var order = new Order(req.body);
-  order.save(function () {*/
-var o = req.body;
+  /*  var order = new Order(req.body);
+    order.save(function () {*/
+  var o = req.body;
   o.userId = req.session.user._id;
   Order.create(o, function () {
-            res.redirect('/chickennuggets');
+    res.redirect('/chickennuggets');
 
-    })
-    /* var collection = global.db.collection('chickenNuggets');
+  });
+  /* var collection = global.db.collection('chickenNuggets');
   collection.save(req.body, function () {
     res.redirect('/chickennuggets')
 });
    console.log(req.body);*/
-    //res.send('Thanks for your order!');
+  //res.send('Thanks for your order!');
 });
 router.post('/order/:id/complete', function (req, res) {
-  Order.findById(req.params.id, function (err, order){
-    order.complete(function (){
+  Order.findById(req.params.id, function (err, order) {
+    order.complete(function () {
       res.redirect('/chickennuggets');
     });
   });
 });
- /* var collection = global.db.collection('chickenNuggets');
+/* var collection = global.db.collection('chickenNuggets');
   collection.update({
       _id: ObjectId(req.params.id)
     }, {

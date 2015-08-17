@@ -115,13 +115,10 @@ app.use(function (err, req, res, next) {
 });*/
 
 app.use(function getAuthStatus(req, res, next){
-  if (req.session.user){
-    res.locals.user = req.session.user;
-  }else {
-    res.locals.user = null;
-  }
+  res.locals.user = req.session.user || null;
+
   next();
-})
+});
 
 app.use('/', routes);
 app.use('/user', user);
@@ -129,8 +126,8 @@ app.use(express.static('www'));
 //middleware function to check all authentication
 app.use(function requireAuth (req, res, next) {
 if (req.session.user){
-  console.log('req.session.user >>>>>>>>')
-  res.locals.user = req.session.user; //check user variable
+
+  /*res.locals.user = req.session.user; //check user variable*/
   next();
 } else {
   res.locals.user = null; //if

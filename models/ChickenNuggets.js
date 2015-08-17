@@ -10,7 +10,7 @@ var _ = require('lodash');
 //Models create a prototype of an object
 //we can set variables for orders here
 function Order(o) {
-  this.userId = ObjectID(o.userId);//creates an id for user ordering nuggets
+  this.userId = ObjectId(o.userId);//creates an id for user ordering nuggets
   this.name = o.name;
   this.style = o.style;
   this.qty = o.qty;
@@ -45,7 +45,7 @@ Order.prototype.complete = function (cb) {
 //helper function for setPrototype
 Order.findById = function (id, cb) {
   Order.collection.find({
-    _id: ObjectID(id)
+    _id: ObjectId(id)
   }, function (err, order) {
     cb(err, setPrototype(order));
   });
@@ -53,8 +53,8 @@ Order.findById = function (id, cb) {
 
 //use this in the router.get function in the chickennuggets.js route
 //this lets us get and display all the orders in chicken-index.ejs
-Order.findAll = function (cb) {
-  Order.collection.find().toArray(function (err, orders) {
+Order.findAllByUserId = function (id, cb) {
+  Order.collection.find({userId: ObjectId(id)}).toArray(function (err, orders) {
     var prototypedOrders = orders.map(function (order) {
       return setPrototype(order);
     });

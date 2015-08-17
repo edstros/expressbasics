@@ -1,3 +1,3 @@
-$(function () {
+/*$(function () {
   alert('DOM Ready!')
-});
+});*/

@@ -3,6 +3,7 @@
 <%- include('head', {page: 'Chicken | List Orders'}) %>
 <body>
  <%- include('header') %>
+ <a href="/chickennuggets/order">Order Chicken Nuggets</a>
   <h1>Pending orders</h1>
   <table>
     <thead>
@@ -14,7 +15,7 @@
         <th>Complete</th>
       </tr>
       <tbody>
-        <% Orders.forEach(function (order) { %>
+        <% orders.forEach(function (order) { %>
           <tr>
             <td><%= order.name %></td>
             <td><%= order.flavor %></td>

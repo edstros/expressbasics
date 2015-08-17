@@ -1,4 +1,5 @@
 var bcrypt = require('bcrypt');
+var _ = require('lodash');
 
 function User(u) {
   this.email = u.email;
@@ -9,7 +10,9 @@ function User(u) {
 User.findByEmail = function (email, cb) {
   User.collection.findOne({
     email: email
-  }, cb)
+  }, function (err, user) {
+    cb(err, setPrototype(user));
+  });
 };
 
 //also does what it says
@@ -24,11 +27,11 @@ User.login = function (u, cb) {
           cb(null, user);
         } else {
           //handle bad password or some other error
-          cb('Bad email/password combination!')
+          cb('Bad email/password combination!');
         }
-      })
+      });
     } else {
-      cb('Bad email/password combination!')
+      cb('Bad email/password combination!');
     }
   });
 };
@@ -42,9 +45,13 @@ User.create = function (u, cb) {
   bcrypt.hash(u.password, 8, function (err, hash) {
     u.hashedPassword = hash;
     var user = new User(u);
-    /*User.colection.save(user, db);*/
+    console.log('what is the user? ', user)
+      /*User.colection.save(user, db);*/
     user.save(cb);
   });
+};
+User.prototype.save = function (cb) {
+  User.collection.save(this, cb);
 };
 
 Object.defineProperty(User, 'collection', {

@@ -4,8 +4,10 @@ var User = require('../models/User');
 
 
 router.get('/new', function newUser(req, res) {
-  //register
+ req.session.regenerate(function () {
   res.render('user/new');
+
+ })
 });
 
 router.post('/', function createUser(req, res) {
@@ -17,18 +19,8 @@ router.post('/', function createUser(req, res) {
         err: err
       });
     } else {
-      res.redirect('/login');
-    }
-  });
-});
-
-router.post('/login', function doLogin(req, res) {
-  User.login(req.body, function (err, user) {
-    req.session.regenerate(function () {
-      req.session.user = user;
-      console.log('user >>>>>>>>>>>>: ', user);
       res.redirect('/');
-    });
+    }
   });
 });
 router.get('/logout', function (req, res) {
@@ -43,6 +35,17 @@ router.get('/login', function loginUser(req, res) {
     req.session.user = user;
 */res.render('user/login');
   });
+
+router.post('/login', function doLogin(req, res) {
+  User.login(req.body, function (err, user) {
+    req.session.regenerate(function () {
+      console.log('>>>>>>req.session.user ' , req.session.user)
+      req.session.user = user;
+      console.log('user >>>>>>>>>>>>: ', user);
+      res.redirect('/');
+    });
+  });
+});
 
 });
 
